@@ -1,8 +1,8 @@
-const DataParser = require("../data-parser");
-const config = require("./config");
-const formatter = require("./formatter");
+import DataParser from "./data-parser";
+import config from "./config";
+import formatter from "./formatter";
 
-class YummyAnimeParser extends DataParser {
+export default class YummyAnimeParser extends DataParser {
     constructor() {
         super(
             config.host,
@@ -12,7 +12,7 @@ class YummyAnimeParser extends DataParser {
             })
     }
 
-    async parseSearch(query) {
+    async parseSearch(query: string) {
         try {
             const data = await this._getSerachData(query);
 
@@ -24,7 +24,7 @@ class YummyAnimeParser extends DataParser {
         }
     }
 
-    async parseAnime(animeRoute) {
+    async parseAnime(animeRoute: string) {
         try {
             const data = await this._getAnimeDetails(animeRoute);
 
@@ -37,7 +37,7 @@ class YummyAnimeParser extends DataParser {
         }
     }
 
-    async parsePlayer(route, referer) {
+    async parsePlayer(route: string, referer: string) {
         try {
             const data = await this._getAnimePlayer(route, referer);
 
@@ -50,11 +50,14 @@ class YummyAnimeParser extends DataParser {
         }
     }
 
-    async autoParsePlayer(query) {
+    async autoParsePlayer(query: string) {
         try {
             const searchResult = await this.parseSearch(query)
-            const animeResult = await this.parseAnime(searchResult[0].route);
-            const playerResult = await this.parsePlayer(searchResult[0].route, animeResult);
+            const animeResult = await this.parseAnime(searchResult[0].url);
+
+            if (!animeResult) throw new Error("Cannot parse anime url");
+
+            const playerResult = await this.parsePlayer(searchResult[0].url, animeResult);
 
             return playerResult;
         } catch (e) {

@@ -1,4 +1,4 @@
-const YummyAnimeParser = require("../engines/yummyanime");
+import YummyAnimeParser from "../lib/yummyanime";
 
 const ymParser = new YummyAnimeParser()
 
@@ -12,7 +12,7 @@ describe("Yummyanime search test", () => {
 describe("Yummyanime getAnime test", () => {
     it("Success", async () => {
         const animeUrl = await ymParser.parseSearch("Атака титанов")
-        const data = await ymParser.parseAnime(animeUrl[0].route);
+        const data = await ymParser.parseAnime(animeUrl[0].url);
         expect(data);
     })
 })

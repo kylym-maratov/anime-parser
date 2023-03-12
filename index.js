@@ -1,1 +1,0 @@
-module.exports.YummAnimeParser = require("./engines/yummyanime");
