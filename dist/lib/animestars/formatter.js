@@ -18,14 +18,41 @@ function formatSearchData(data) {
         var _a;
         let urls = (_a = $(el).attr("href")) === null || _a === void 0 ? void 0 : _a.split("/");
         let url = "/" + urls[urls.length - 1];
+        let genre = $(el).find(".poster__meta").text();
+        let rating = $(el).find(".poster__ra").text();
         animeList.push({
             title: $(el).find(".poster__title").text(),
             image: $(el).find(".poster__img > img").attr("data-src"),
-            genre: $(el).find(".poster__meta").text(),
+            year: genre.split(",")[0],
+            rating,
             url
         });
     });
     return animeList;
+}
+function formatAnimeData(data) {
+    const $ = cheerio_1.default.load(data);
+    const animeGInfo = [];
+    let description = "";
+    $(".page__subcol-info > li").each((i, el) => {
+        const text = $(el).text().split(":");
+        animeGInfo.push(text[1].trimStart());
+    });
+    $(".page__text > p").each((i, el) => {
+        description += $(el).text();
+    });
+    const anime = {
+        title: $(".page__subcol-header > h1").text(),
+        originalName: $(".page__subcol-header > div").text(),
+        sourcePlayer: "",
+        status: "",
+        director: animeGInfo[2],
+        translates: $(".fon-dob > ul > li").text().split(":")[1].trimStart(),
+        description,
+        genre: animeGInfo[3] ? animeGInfo[3].toString() : "",
+        license: $(".pmovie__quality > div").text().split(" ").splice(0, 2).toString()
+    };
+    return anime;
 }
 function formatPlayerUrl(data) {
     const $ = cheerio_1.default.load(data);
@@ -36,7 +63,7 @@ function formatPlayerUrl(data) {
             translateName: $(el).text()
         });
     });
-    const iframeUrl = cheerio_1.default.load(data)("iframe").attr("src");
+    const iframeUrl = cheerio_1.default.load(data)("iframe").attr("src") || "";
     return {
         iframeUrl,
         translates
@@ -45,5 +72,6 @@ function formatPlayerUrl(data) {
 exports.default = {
     formatAuthKey,
     formatSearchData,
-    formatPlayerUrl
+    formatPlayerUrl,
+    formatAnimeData
 };

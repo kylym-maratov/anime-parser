@@ -44,6 +44,16 @@ class DataParser {
             return response.data;
         });
     }
+    _getAnimeDetails(path) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const response = yield axios_1.default.request({
+                url: this.host + path, method: "GET"
+            });
+            if (response.status !== this.successCode)
+                throw Error(this.failedMessage + `${response.status} code`);
+            return response.data;
+        });
+    }
     _getPlayer(formData) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.request({

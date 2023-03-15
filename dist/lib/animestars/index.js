@@ -31,6 +31,31 @@ class AnimeStarsParser extends data_parser_1.default {
             }
         });
     }
+    parseAnimes(query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const searchResult = yield this.parseSearch(query);
+                const animePromises = searchResult.map((item, i) => {
+                    return new Promise((resolve) => {
+                        this._getAnimeDetails(item.url).then((data) => {
+                            const animeData = formatter_1.default.formatAnimeData(data);
+                            this.parsePlayer(item.url).then((player) => {
+                                const fullAnimeData = Object.assign(Object.assign(Object.assign({}, item), animeData), { iframeUrl: player.iframeUrl });
+                                resolve(fullAnimeData);
+                            });
+                        });
+                    });
+                });
+                const animes = yield Promise.all(animePromises);
+                if (!animes.length)
+                    throw new Error("Cannot find animes by query");
+                return animes;
+            }
+            catch (e) {
+                throw e;
+            }
+        });
+    }
     parseSearch(query) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -61,3 +86,4 @@ class AnimeStarsParser extends data_parser_1.default {
     }
 }
 exports.default = AnimeStarsParser;
+new AnimeStarsParser().parseAnimes("атака");
