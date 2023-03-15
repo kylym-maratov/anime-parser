@@ -37,7 +37,7 @@ function formatAnimeData(data) {
         status: animeGInfo[6],
         license: animeGInfo[7],
         translates: animeGInfo[8] ? animeGInfo[8] : animeGInfo[7],
-        decription: $(".inner-page__desc").children(".inner-page__text").text(),
+        description: $(".inner-page__desc").children(".inner-page__text").text(),
         sourcePlayer: player || ""
     };
     return anime;

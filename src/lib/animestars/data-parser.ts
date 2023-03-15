@@ -39,6 +39,17 @@ export default class DataParser {
         return response.data;
     }
 
+    public async _getAnimeDetails(path: string) {
+        const response = await axios.request({
+            url: this.host + path, method: "GET"
+        });
+
+        if (response.status !== this.successCode)
+            throw Error(this.failedMessage + `${response.status} code`);
+
+        return response.data;
+    }
+
     public async _getPlayer(formData: FormData) {
         const response = await axios.request({
             url: this.host + this.routes.player,

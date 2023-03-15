@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import { MiddleAnimeTypes, ShortAnimeTypes } from "./types";
+import { MiddleAnimeTypes, ShortAnimeTypes } from "../types";
 
 function formatSearchData(data: any): ShortAnimeTypes[] {
     const $ = cheerio.load(data);
@@ -44,7 +44,7 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
         status: animeGInfo[6],
         license: animeGInfo[7],
         translates: animeGInfo[8] ? animeGInfo[8] : animeGInfo[7],
-        decription: $(".inner-page__desc").children(".inner-page__text").text(),
+        description: $(".inner-page__desc").children(".inner-page__text").text(),
         sourcePlayer: player || ""
     };
 

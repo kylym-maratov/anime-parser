@@ -23,7 +23,7 @@ app.get("/stars/search", async (req, res) => {
     const { query } = req.query;
 
     try {
-        const animes = await anistarParser.parseSearch(query);
+        const animes = await anistarParser.parseAnimes(query);
 
         res.json(animes);
     } catch (e) {

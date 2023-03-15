@@ -1,7 +1,7 @@
 import DataParser from "./data-parser";
 import config from "./config";
 import formatter from "./formatter";
-import { AnimeTypes, MiddleAnimeTypes, ShortAnimeTypes } from "./types";
+import { AnimeTypes, MiddleAnimeTypes, ShortAnimeTypes } from "../types";
 
 export default class YummyAnimeParser extends DataParser {
     constructor() {

@@ -13,7 +13,7 @@ export interface MiddleAnimeTypes {
     title: string;
     originalName: string;
     sourcePlayer: string;
-    decription: string;
+    description: string;
     genre: string;
     license: string;
     translates: string;
@@ -29,7 +29,7 @@ export interface AnimeTypes {
     title: string;
     originalName: string;
     sourcePlayer: string;
-    decription: string;
+    description: string;
     genre: string;
     license: string;
     translates: string;
