@@ -15,8 +15,6 @@ export default class DataParser {
         this.failedMessage = `Request failed with`
     }
 
-
-
     public async _getSerachData(query: string = "") {
         const response = await axios.request({
             url: this.host + this.routes.search + query, method: "POST"
@@ -28,9 +26,9 @@ export default class DataParser {
         return response.data;
     }
 
-    public async _getAnimeDetails(route: string) {
+    public async _getAnimeDetails(path: string) {
         const response = await axios.request({
-            url: this.host + route, method: "GET"
+            url: this.host + path, method: "GET"
         });
 
         if (response.status !== this.successCode)
@@ -39,11 +37,11 @@ export default class DataParser {
         return response.data;
     }
 
-    public async _getAnimePlayer(route: string, referer: string) {
+    public async _getAnimePlayer(path: string, referer: string) {
         const headers = { ...this.headers, "referer": this.host + referer };
 
         const response = await axios.request({
-            url: this.host + route, method: "GET", headers
+            url: this.host + path, method: "GET", headers
         });
 
         if (response.status !== this.successCode)

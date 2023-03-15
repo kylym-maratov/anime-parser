@@ -14,22 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const yummyanime_1 = __importDefault(require("../lib/yummyanime"));
 const ymParser = new yummyanime_1.default();
-describe("Yummyanime search test", () => {
+describe("Yummyanime getAnimes test", () => {
     it("Success", () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield ymParser.parseSearch("Атака титанов");
-        expect(data);
-    }));
-});
-describe("Yummyanime getAnime test", () => {
-    it("Success", () => __awaiter(void 0, void 0, void 0, function* () {
-        const animeUrl = yield ymParser.parseSearch("Атака титанов");
-        const data = yield ymParser.parseAnime(animeUrl[0].url);
-        expect(data);
-    }));
-});
-describe("Yummyanime getPlayer test", () => {
-    it("Success", () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield ymParser.autoParsePlayer("Атака титанов");
+        const data = yield ymParser.parseAnimes("Атака титанов");
         expect(data);
     }));
 });

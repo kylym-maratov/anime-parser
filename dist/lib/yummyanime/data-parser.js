@@ -31,21 +31,21 @@ class DataParser {
             return response.data;
         });
     }
-    _getAnimeDetails(route) {
+    _getAnimeDetails(path) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.request({
-                url: this.host + route, method: "GET"
+                url: this.host + path, method: "GET"
             });
             if (response.status !== this.successCode)
                 throw Error(this.failedMessage + `${response.status} code`);
             return response.data;
         });
     }
-    _getAnimePlayer(route, referer) {
+    _getAnimePlayer(path, referer) {
         return __awaiter(this, void 0, void 0, function* () {
             const headers = Object.assign(Object.assign({}, this.headers), { "referer": this.host + referer });
             const response = yield axios_1.default.request({
-                url: this.host + route, method: "GET", headers
+                url: this.host + path, method: "GET", headers
             });
             if (response.status !== this.successCode)
                 throw Error(this.failedMessage + `${response.status} code`);

@@ -33,22 +33,37 @@ class YummyAnimeParser extends data_parser_1.default {
             }
         });
     }
-    parseAnime(animeRoute) {
+    parseAnimes(query) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this._getAnimeDetails(animeRoute);
-                const formated = formatter_1.default.formatAnimeData(data);
-                return formated;
+                const searchResult = yield this.parseSearch(query);
+                const aniParsePromises = searchResult.map((item) => {
+                    return new Promise((resolve) => {
+                        this._getAnimeDetails(item.url).then((animeDetailsData) => {
+                            const animeData = formatter_1.default.formatAnimeData(animeDetailsData);
+                            if (!animeData.sourcePlayer.includes("/engine/ajax"))
+                                return resolve(Object.assign(Object.assign({}, animeData), item));
+                            this.parsePlayer(animeData.sourcePlayer, item.url).then((iframeUrl) => {
+                                const fullAnimeData = Object.assign(Object.assign(Object.assign({}, animeData), item), { iframeUrl });
+                                resolve(fullAnimeData);
+                            });
+                        });
+                    });
+                });
+                const animes = yield Promise.all(aniParsePromises);
+                if (!animes.length)
+                    throw new Error("Cannot find anime by query");
+                return animes;
             }
             catch (e) {
                 throw e;
             }
         });
     }
-    parsePlayer(route, referer) {
+    parsePlayer(url, referer) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = yield this._getAnimePlayer(route, referer);
+                const data = yield this._getAnimePlayer(url, referer);
                 const formated = formatter_1.default.formatPlayerData(data);
                 return formated;
             }
@@ -57,21 +72,5 @@ class YummyAnimeParser extends data_parser_1.default {
             }
         });
     }
-    autoParsePlayer(query) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const searchResult = yield this.parseSearch(query);
-                const animeResult = yield this.parseAnime(searchResult[0].url);
-                if (!animeResult)
-                    throw new Error("Cannot parse anime url");
-                const playerResult = yield this.parsePlayer(searchResult[0].url, animeResult);
-                return playerResult;
-            }
-            catch (e) {
-                throw e;
-            }
-        });
-    }
 }
 exports.default = YummyAnimeParser;
-module.exports = YummyAnimeParser;

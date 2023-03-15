@@ -1,6 +1,7 @@
 import DataParser from "./data-parser";
 import config from "./config";
 import formatter from "./formatter";
+import { AnimeTypes, MiddleAnimeTypes, ShortAnimeTypes } from "./types";
 
 export default class YummyAnimeParser extends DataParser {
     constructor() {
@@ -12,7 +13,7 @@ export default class YummyAnimeParser extends DataParser {
             })
     }
 
-    async parseSearch(query: string) {
+    private async parseSearch(query: string) {
         try {
             const data = await this._getSerachData(query);
 
@@ -24,22 +25,38 @@ export default class YummyAnimeParser extends DataParser {
         }
     }
 
-    async parseAnime(animeRoute: string) {
+    async parseAnimes(query: string): Promise<AnimeTypes[]> {
         try {
-            const data = await this._getAnimeDetails(animeRoute);
+            const searchResult = await this.parseSearch(query);
 
-            const formated = formatter.formatAnimeData(data);
+            const aniParsePromises = searchResult.map((item) => {
+                return new Promise((resolve) => {
+                    this._getAnimeDetails(item.url).then((animeDetailsData) => {
+                        const animeData = formatter.formatAnimeData(animeDetailsData);
 
-            return formated;
+                        if (!animeData.sourcePlayer.includes("/engine/ajax")) return resolve({ ...animeData, ...item });
 
+                        this.parsePlayer(animeData.sourcePlayer, item.url).then((iframeUrl) => {
+                            const fullAnimeData: AnimeTypes = { ...animeData, ...item, iframeUrl };
+                            resolve(fullAnimeData);
+                        })
+                    })
+                })
+            })
+
+            const animes: AnimeTypes[] | any[] = await Promise.all(aniParsePromises);
+
+            if (!animes.length) throw new Error("Cannot find anime by query");
+
+            return animes;
         } catch (e) {
             throw e;
         }
     }
 
-    async parsePlayer(route: string, referer: string) {
+    private async parsePlayer(url: string, referer: string) {
         try {
-            const data = await this._getAnimePlayer(route, referer);
+            const data = await this._getAnimePlayer(url, referer);
 
             const formated = formatter.formatPlayerData(data);
 
@@ -49,22 +66,5 @@ export default class YummyAnimeParser extends DataParser {
             throw e;
         }
     }
-
-    async autoParsePlayer(query: string) {
-        try {
-            const searchResult = await this.parseSearch(query)
-            const animeResult = await this.parseAnime(searchResult[0].url);
-
-            if (!animeResult) throw new Error("Cannot parse anime url");
-
-            const playerResult = await this.parsePlayer(searchResult[0].url, animeResult);
-
-            return playerResult;
-        } catch (e) {
-            throw e;
-        }
-    }
 }
 
-
-module.exports = YummyAnimeParser;

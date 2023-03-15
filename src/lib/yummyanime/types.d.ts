@@ -1,6 +1,6 @@
 
 
-export interface AnimeTypes {
+export interface ShortAnimeTypes {
     title: string;
     url: string;
     year: string;
@@ -9,3 +9,31 @@ export interface AnimeTypes {
 }
 
 
+export interface MiddleAnimeTypes {
+    title: string;
+    originalName: string;
+    sourcePlayer: string;
+    decription: string;
+    genre: string;
+    license: string;
+    translates: string;
+    status: string;
+    director: string;
+}
+
+export interface AnimeTypes {
+    url: string;
+    year: string;
+    image?: string;
+    rating: string;
+    title: string;
+    originalName: string;
+    sourcePlayer: string;
+    decription: string;
+    genre: string;
+    license: string;
+    translates: string;
+    status: string;
+    director: string;
+    iframeUrl: string;
+}
