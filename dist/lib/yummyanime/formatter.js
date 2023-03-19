@@ -1,7 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+    (this && this.__importDefault) ||
+    function (mod) {
+        return mod && mod.__esModule ? mod : { default: mod };
+    };
 Object.defineProperty(exports, "__esModule", { value: true });
 const cheerio_1 = __importDefault(require("cheerio"));
 function formatSearchData(data) {
@@ -13,9 +15,12 @@ function formatSearchData(data) {
         animeList.push({
             title: $(el).find(".movie-item__title").text(),
             url: "/" + urls[urls.length - 1],
-            year: $(el).find(".movie-item__meta > span").text().replace(/[{()}]/g, ""),
+            year: $(el)
+                .find(".movie-item__meta > span")
+                .text()
+                .replace(/[{()}]/g, ""),
             image: $(el).find(".movie-item__img > img").attr("src"),
-            rating: $(el).find(".movie-item__rating").text().replace(/ /g, "")
+            rating: $(el).find(".movie-item__rating").text().replace(/ /g, ""),
         });
     });
     return animeList;
@@ -37,8 +42,10 @@ function formatAnimeData(data) {
         status: animeGInfo[6],
         license: animeGInfo[7],
         translates: animeGInfo[8] ? animeGInfo[8] : animeGInfo[7],
-        description: $(".inner-page__desc").children(".inner-page__text").text(),
-        sourcePlayer: player || ""
+        description: $(".inner-page__desc")
+            .children(".inner-page__text")
+            .text(),
+        sourcePlayer: player || "",
     };
     return anime;
 }

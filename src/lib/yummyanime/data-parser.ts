@@ -12,12 +12,13 @@ export default class DataParser {
         this.headers = headers;
         this.successCode = 200;
         this.routes = routes;
-        this.failedMessage = `Request failed with`
+        this.failedMessage = `Request failed with`;
     }
 
     public async _getSerachData(query: string = "") {
         const response = await axios.request({
-            url: this.host + this.routes.search + query, method: "POST"
+            url: this.host + this.routes.search + query,
+            method: "POST",
         });
 
         if (response.status !== this.successCode)
@@ -28,7 +29,8 @@ export default class DataParser {
 
     public async _getAnimeDetails(path: string) {
         const response = await axios.request({
-            url: this.host + path, method: "GET"
+            url: this.host + path,
+            method: "GET",
         });
 
         if (response.status !== this.successCode)
@@ -38,10 +40,12 @@ export default class DataParser {
     }
 
     public async _getAnimePlayer(path: string, referer: string) {
-        const headers = { ...this.headers, "referer": this.host + referer };
+        const headers = { ...this.headers, referer: this.host + referer };
 
         const response = await axios.request({
-            url: this.host + path, method: "GET", headers
+            url: this.host + path,
+            method: "GET",
+            headers,
         });
 
         if (response.status !== this.successCode)
@@ -50,4 +54,3 @@ export default class DataParser {
         return response.data;
     }
 }
-

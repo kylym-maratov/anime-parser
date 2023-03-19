@@ -1,5 +1,4 @@
-import AnimeStarsParser from "../lib/animestars"
-
+import AnimeStarsParser from "../lib/animestars";
 
 const aniStarsParser = new AnimeStarsParser();
 
@@ -8,5 +7,5 @@ describe("AnimeStars parseAnimes test", () => {
         const data = await aniStarsParser.parseAnimes("Атака титанов");
 
         expect(data);
-    })
-})
+    });
+});

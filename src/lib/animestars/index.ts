@@ -1,16 +1,11 @@
-import DataParser from "./data-parser"
+import DataParser from "./data-parser";
 import config from "./config";
 import formatter from "./formatter";
 import { AnimeTypes } from "../types";
 
-
 export default class AnimeStarsParser extends DataParser {
     constructor() {
-        super(
-            config.host,
-            config.routes,
-            {}
-        )
+        super(config.host, config.routes, config.headers);
     }
 
     private async parseAuthKey() {
@@ -24,42 +19,13 @@ export default class AnimeStarsParser extends DataParser {
         }
     }
 
-    public async parseAnimes(query: string): Promise<AnimeTypes[]> {
-        try {
-            const searchResult = await this.parseSearch(query);
-
-            const animePromises = searchResult.map((item, i) => {
-                return new Promise((resolve) => {
-                    this._getAnimeDetails(item.url).then((data) => {
-                        const animeData = formatter.formatAnimeData(data);
-
-                        this.parsePlayer(item.url).then((player) => {
-                            const fullAnimeData: AnimeTypes = { ...item, ...animeData, iframeUrl: player.iframeUrl }
-                            resolve(fullAnimeData);
-                        })
-                    })
-                })
-            })
-
-            const animes: AnimeTypes[] | any[] = await Promise.all(animePromises);
-
-            if (!animes.length) throw new Error("Cannot find animes by query");
-
-            return animes;
-        } catch (e) {
-            throw e;
-        }
-    }
-
-
-
     private async parseSearch(query: string) {
         try {
             const authKey = await this.parseAuthKey();
             const formData = new FormData();
             formData.append("story", query);
             formData.append("user_hash", authKey);
-            formData.append("subaction", "search")
+            formData.append("subaction", "search");
 
             const data = await this._getSearchData(formData);
             const formated = formatter.formatSearchData(data);
@@ -84,8 +50,39 @@ export default class AnimeStarsParser extends DataParser {
 
         return playerData;
     }
+
+    public async parseAnimes(query: string): Promise<AnimeTypes[]> {
+        try {
+            const searchResult = await this.parseSearch(query);
+
+            const animePromises = searchResult.map((item, i) => {
+                return new Promise((resolve) => {
+                    this._getAnimeDetails(item.url).then((data) => {
+                        const animeData = formatter.formatAnimeData(data);
+
+                        this.parsePlayer(item.url).then((player) => {
+                            const fullAnimeData: AnimeTypes = {
+                                ...item,
+                                ...animeData,
+                                iframeUrl: player.iframeUrl,
+                            };
+                            resolve(fullAnimeData);
+                        });
+                    });
+                });
+            });
+
+            const animes: AnimeTypes[] | any[] = await Promise.all(
+                animePromises
+            );
+
+            if (!animes.length) throw new Error("Cannot find animes by query");
+
+            return animes;
+        } catch (e) {
+            throw e;
+        }
+    }
 }
 
-
-
-new AnimeStarsParser().parseAnimes("атака")
+new AnimeStarsParser().parseAnimes("атака");

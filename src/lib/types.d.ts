@@ -1,5 +1,3 @@
-
-
 export interface ShortAnimeTypes {
     title: string;
     url: string;
@@ -7,7 +5,6 @@ export interface ShortAnimeTypes {
     image?: string;
     rating: string;
 }
-
 
 export interface MiddleAnimeTypes {
     title: string;
