@@ -13,8 +13,8 @@
         "build": "npx tsc",
         "lint:check": "eslint .",
         "lint:fix": "eslint --fix .",
-        "format:write": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:write": "prettier --write ./src",
+        "format:check": "prettier --check ./src"
     },
     "keywords": [
         "anime",
