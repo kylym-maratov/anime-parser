@@ -6,17 +6,17 @@ function formatAuthKey(data: any): string {
 
     const pattern = /[^a-zа-яё0-9\s]/gi;
 
-    const scriptData = $("script")
-        .get()[6]
-        .children[0].data.split("var")[3]
-        .split("=")[1];
+    // const scriptData = $("script")
+    //     .get()[6]
+    //     .children[0].data.split("var")[3]
+    //     .split("=")[1];
 
-    const authKey = scriptData
-        .replace(pattern, "")
-        .replace(/ /g, "")
-        .replace("\n", "");
+    // const authKey = scriptData
+    //     .replace(pattern, "")
+    //     .replace(/ /g, "")
+    //     .replace("\n", "");
 
-    return authKey;
+    return "";
 }
 
 function formatSearchData(data: any): ShortAnimeTypes[] {

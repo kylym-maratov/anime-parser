@@ -7,15 +7,15 @@ const cheerio_1 = __importDefault(require("cheerio"));
 function formatAuthKey(data) {
     const $ = cheerio_1.default.load(data);
     const pattern = /[^a-zа-яё0-9\s]/gi;
-    const scriptData = $("script")
-        .get()[6]
-        .children[0].data.split("var")[3]
-        .split("=")[1];
-    const authKey = scriptData
-        .replace(pattern, "")
-        .replace(/ /g, "")
-        .replace("\n", "");
-    return authKey;
+    // const scriptData = $("script")
+    //     .get()[6]
+    //     .children[0].data.split("var")[3]
+    //     .split("=")[1];
+    // const authKey = scriptData
+    //     .replace(pattern, "")
+    //     .replace(/ /g, "")
+    //     .replace("\n", "");
+    return "";
 }
 function formatSearchData(data) {
     const $ = cheerio_1.default.load(data);
