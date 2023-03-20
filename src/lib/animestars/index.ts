@@ -81,7 +81,7 @@ export default class AnimeStarsParser extends DataParser {
 
             if (!animes.length) throw new Error("Cannot find animes by query");
 
-            return animes;
+            return animes.filter((item) => item !== null);
         } catch (e) {
             throw e;
         }

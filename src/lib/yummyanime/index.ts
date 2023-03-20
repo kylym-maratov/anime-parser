@@ -67,7 +67,7 @@ export default class YummyAnimeParser extends DataParser {
 
             if (!animes.length) throw new Error("Cannot find anime by query");
 
-            return animes;
+            return animes.filter((item) => item !== null);
         } catch (e) {
             throw e;
         }
