@@ -70,7 +70,7 @@ class AnimeStarsParser extends data_parser_1.default {
                         this._getAnimeDetails(item.url).then((data) => {
                             const animeData = formatter_1.default.formatAnimeData(data);
                             this.parsePlayer(item.url).then((player) => {
-                                const fullAnimeData = Object.assign(Object.assign(Object.assign({}, item), animeData), { iframeUrl: player.iframeUrl });
+                                const fullAnimeData = Object.assign(Object.assign(Object.assign({}, item), animeData), { iframeUrl: player.iframeUrl, translatesIds: player.translates });
                                 resolve(fullAnimeData);
                             });
                         });
