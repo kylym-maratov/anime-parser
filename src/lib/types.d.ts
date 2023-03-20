@@ -33,4 +33,8 @@ export interface AnimeTypes {
     status: string;
     director: string;
     iframeUrl: string;
+    translatesIds?: {
+        translateId: string;
+        trasnlateName: string;
+    }[];
 }

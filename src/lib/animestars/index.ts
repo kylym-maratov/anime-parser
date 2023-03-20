@@ -67,6 +67,7 @@ export default class AnimeStarsParser extends DataParser {
                                 ...item,
                                 ...animeData,
                                 iframeUrl: player.iframeUrl,
+                                translatesIds: player.translates
                             };
                             resolve(fullAnimeData);
                         });
