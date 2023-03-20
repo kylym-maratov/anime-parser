@@ -51,9 +51,11 @@ export default class AnimeStarsParser extends DataParser {
         return playerData;
     }
 
-    public async parseAnimes(query: string): Promise<AnimeTypes[]> {
+    public async parseAnimes(query: string, limit: number | null = null): Promise<AnimeTypes[]> {
         try {
             const searchResult = await this.parseSearch(query);
+
+            if (limit) searchResult.length = limit;
 
             const animePromises = searchResult.map((item, i) => {
                 return new Promise((resolve) => {
@@ -85,4 +87,3 @@ export default class AnimeStarsParser extends DataParser {
     }
 }
 
-new AnimeStarsParser().parseAnimes("атака");

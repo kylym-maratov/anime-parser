@@ -1,9 +1,7 @@
 "use strict";
-var __importDefault =
-    (this && this.__importDefault) ||
-    function (mod) {
-        return mod && mod.__esModule ? mod : { default: mod };
-    };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const cheerio_1 = __importDefault(require("cheerio"));
 function formatAuthKey(data) {
@@ -24,10 +22,7 @@ function formatSearchData(data) {
     const animeList = [];
     $(".poster").each((i, el) => {
         var _a;
-        let urls =
-            (_a = $(el).attr("href")) === null || _a === void 0
-                ? void 0
-                : _a.split("/");
+        let urls = (_a = $(el).attr("href")) === null || _a === void 0 ? void 0 : _a.split("/");
         let url = "/" + urls[urls.length - 1];
         let genre = $(el).find(".poster__meta").text();
         let rating = $(el).find(".poster__ra").text();

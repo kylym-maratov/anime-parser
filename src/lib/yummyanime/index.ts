@@ -32,9 +32,11 @@ export default class YummyAnimeParser extends DataParser {
         }
     }
 
-    async parseAnimes(query: string): Promise<AnimeTypes[]> {
+    async parseAnimes(query: string, limit: number | null = null): Promise<AnimeTypes[]> {
         try {
             const searchResult = await this.parseSearch(query);
+
+            if (limit) searchResult.length = limit;
 
             const aniParsePromises = searchResult.map((item) => {
                 return new Promise((resolve) => {
