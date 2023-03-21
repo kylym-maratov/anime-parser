@@ -79,7 +79,7 @@ class AnimeStarsParser extends data_parser_1.default {
                 const animes = yield Promise.all(animePromises);
                 if (!animes.length)
                     throw new Error("Cannot find animes by query");
-                return animes;
+                return animes.filter((item) => item !== null);
             }
             catch (e) {
                 throw e;

@@ -7,8 +7,10 @@ export interface ShortAnimeTypes {
 }
 
 export interface MiddleAnimeTypes {
+    source: string;
     title: string;
     originalName: string;
+    time?: string;
     sourcePlayer: string;
     description: string;
     genre: string;

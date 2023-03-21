@@ -1,6 +1,9 @@
 import cheerio from "cheerio";
 import { MiddleAnimeTypes, ShortAnimeTypes } from "../types";
 
+const source = "https://yummyanime.tv"
+
+
 function formatAuthKey(data: any): string {
     const $ = cheerio.load(data);
 
@@ -57,6 +60,7 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
     });
 
     const anime: MiddleAnimeTypes = {
+        source,
         title: $(".page__subcol-header > h1").text(),
         originalName: $(".page__subcol-header > div").text(),
         sourcePlayer: "",

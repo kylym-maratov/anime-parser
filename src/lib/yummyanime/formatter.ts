@@ -1,6 +1,8 @@
 import cheerio from "cheerio";
 import { MiddleAnimeTypes, ShortAnimeTypes } from "../types";
 
+const source = "https://yummyanime.tv"
+
 function formatSearchData(data: any): ShortAnimeTypes[] {
     const $ = cheerio.load(data);
     const animeList: ShortAnimeTypes[] = [];
@@ -36,7 +38,8 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
         animeGInfo.push(text[1].trimStart());
     });
 
-    const anime = {
+    const anime: MiddleAnimeTypes = {
+        source,
         title: $(".inner-page__main").find(".inner-page__title > h1").text(),
         originalName: $(".inner-page__subtitle").text(),
         time: animeGInfo[1],
