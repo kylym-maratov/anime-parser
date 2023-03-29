@@ -1,30 +1,28 @@
 import DataParser from './data-parser'
 import config from './config'
 import formatter from './formatter'
-import { AnimeTypes } from '../types'
+import { Anime } from '../types'
 
 export default class AnimeStarsParser extends DataParser {
     constructor() {
         super(config.host, config.routes, config.headers)
     }
 
-    private async parseAuthKey() {
-        try {
-            const hostData = await this._getHost()
-            const authKey = formatter.formatAuthKey(hostData)
+    // private async getAuthKey() {
+    //     try {
+    //         const hostData = await this._getHost()
+    //         const authKey = formatter.formatAuthKey(hostData)
 
-            return authKey
-        } catch (e) {
-            throw e
-        }
-    }
+    //         return authKey
+    //     } catch (e) {
+    //         throw e
+    //     }
+    // }
 
-    private async parseSearch(query: string) {
+    private async searchSeveralAnime(query: string) {
         try {
-            const authKey = await this.parseAuthKey()
             const formData = new FormData()
             formData.append('story', query)
-            formData.append('user_hash', authKey)
             formData.append('subaction', 'search')
 
             const data = await this._getSearchData(formData)
@@ -36,7 +34,7 @@ export default class AnimeStarsParser extends DataParser {
         }
     }
 
-    private async parsePlayer(url: string) {
+    private async getAnimeIframe(url: string) {
         let news_id = url.split('-')[0].replace('/', '')
 
         const formData = new FormData()
@@ -44,29 +42,29 @@ export default class AnimeStarsParser extends DataParser {
         formData.append('news_id', news_id)
         formData.append('action', 'load_player')
 
-        const player = await this._getPlayer(formData)
+        const iframeData = await this._getPlayer(formData)
 
-        const playerData = formatter.formatPlayerUrl(player)
+        const iframe = formatter.formatIframeUrl(iframeData)
 
-        return playerData
+        return iframe
     }
 
-    public async parseAnimes(
+    async getAnimesByName(
         query: string,
         limit: number | null = null
-    ): Promise<AnimeTypes[]> {
+    ): Promise<Anime[]> {
         try {
-            const searchResult = await this.parseSearch(query)
+            const searchResult = await this.searchSeveralAnime(query)
 
             if (limit) searchResult.length = limit
 
-            const animePromises = searchResult.map((item, i) => {
+            const animePromiseWrapper = searchResult.map((item, i) => {
                 return new Promise((resolve) => {
                     this._getAnimeDetails(item.url).then((data) => {
                         const animeData = formatter.formatAnimeData(data)
 
-                        this.parsePlayer(item.url).then((player) => {
-                            const fullAnimeData: AnimeTypes = {
+                        this.getAnimeIframe(item.url).then((player) => {
+                            const fullAnimeData: Anime = {
                                 ...item,
                                 ...animeData,
                                 iframeUrl: player.iframeUrl,
@@ -78,8 +76,8 @@ export default class AnimeStarsParser extends DataParser {
                 })
             })
 
-            const animes: AnimeTypes[] | any[] = await Promise.all(
-                animePromises
+            const animes: Anime[] | any[] = await Promise.all(
+                animePromiseWrapper
             )
 
             if (!animes.length) throw new Error('Cannot find animes by query')

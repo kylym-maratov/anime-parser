@@ -1,4 +1,4 @@
-export interface ShortAnimeTypes {
+export interface SearchAnime {
     title: string
     url: string
     year: string
@@ -6,12 +6,12 @@ export interface ShortAnimeTypes {
     rating: string
 }
 
-export interface MiddleAnimeTypes {
+export interface AnimeInfo {
     source: string
     title: string
     originalName: string
     time?: string
-    sourcePlayer: string
+    player: string
     description: string
     genre: string
     license: string
@@ -20,14 +20,14 @@ export interface MiddleAnimeTypes {
     director: string
 }
 
-export interface AnimeTypes {
+export interface Anime {
     url: string
     year: string
     image?: string
     rating: string
     title: string
     originalName: string
-    sourcePlayer: string
+    player: string
     description: string
     genre: string
     license: string

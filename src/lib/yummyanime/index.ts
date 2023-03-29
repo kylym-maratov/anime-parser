@@ -1,14 +1,14 @@
 import DataParser from './data-parser'
 import config from './config'
 import formatter from './formatter'
-import { AnimeTypes } from '../types'
+import { Anime } from '../types'
 
 export default class YummyAnimeParser extends DataParser {
     constructor() {
         super(config.host, config.routes, config.headers)
     }
 
-    private async parseSearch(query: string) {
+    private async searchSeveralAnime(query: string) {
         try {
             const data = await this._getSerachData(query)
 
@@ -20,7 +20,7 @@ export default class YummyAnimeParser extends DataParser {
         }
     }
 
-    private async parsePlayer(url: string, referer: string) {
+    private async getAnimeIframe(url: string, referer: string) {
         try {
             const data = await this._getAnimePlayer(url, referer)
 
@@ -32,12 +32,12 @@ export default class YummyAnimeParser extends DataParser {
         }
     }
 
-    async parseAnimes(
+    async getAnimesByName(
         query: string,
         limit: number | null = null
-    ): Promise<AnimeTypes[]> {
+    ): Promise<Anime[]> {
         try {
-            const searchResult = await this.parseSearch(query)
+            const searchResult = await this.searchSeveralAnime(query)
 
             if (limit) searchResult.length = limit
 
@@ -47,12 +47,12 @@ export default class YummyAnimeParser extends DataParser {
                         const animeData =
                             formatter.formatAnimeData(animeDetailsData)
 
-                        if (!animeData.sourcePlayer.includes('/engine/ajax'))
+                        if (!animeData.player.includes('/engine/ajax'))
                             return resolve({ ...animeData, ...item })
 
-                        this.parsePlayer(animeData.sourcePlayer, item.url).then(
+                        this.getAnimeIframe(animeData.player, item.url).then(
                             (iframeUrl) => {
-                                const fullAnimeData: AnimeTypes = {
+                                const fullAnimeData = {
                                     ...animeData,
                                     ...item,
                                     iframeUrl,
@@ -64,9 +64,7 @@ export default class YummyAnimeParser extends DataParser {
                 })
             })
 
-            const animes: AnimeTypes[] | any[] = await Promise.all(
-                aniParsePromises
-            )
+            const animes: Anime[] | any[] = await Promise.all(aniParsePromises)
 
             if (!animes.length) throw new Error('Cannot find anime by query')
 

@@ -1,11 +1,12 @@
 import cheerio from 'cheerio'
-import { MiddleAnimeTypes, ShortAnimeTypes } from '../types'
 
-const source = 'https://yummyanime.tv'
+import config from './config'
 
-function formatSearchData(data: any): ShortAnimeTypes[] {
+import { AnimeInfo, SearchAnime } from '../types'
+
+function formatSearchData(data: any): SearchAnime[] {
     const $ = cheerio.load(data)
-    const animeList: ShortAnimeTypes[] = []
+    const animeList: SearchAnime[] = []
 
     $('.movie-item').each((i, el) => {
         let animeItem = $(el).find('.movie-item__link').attr('href')
@@ -26,7 +27,7 @@ function formatSearchData(data: any): ShortAnimeTypes[] {
     return animeList
 }
 
-function formatAnimeData(data: any): MiddleAnimeTypes {
+function formatAnimeData(data: any): AnimeInfo {
     const $ = cheerio.load(data)
 
     const player = $('.tabs-block__content > iframe').attr('src')
@@ -38,8 +39,8 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
         animeGInfo.push(text[1].trimStart())
     })
 
-    const anime: MiddleAnimeTypes = {
-        source,
+    const anime: AnimeInfo = {
+        source: config.host,
         title: $('.inner-page__main').find('.inner-page__title > h1').text(),
         originalName: $('.inner-page__subtitle').text(),
         time: animeGInfo[1],
@@ -51,7 +52,7 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
         description: $('.inner-page__desc')
             .children('.inner-page__text')
             .text(),
-        sourcePlayer: player || '',
+        player: player || '',
     }
 
     return anime

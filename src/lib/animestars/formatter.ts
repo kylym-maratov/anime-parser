@@ -1,27 +1,28 @@
 import cheerio from 'cheerio'
-import { MiddleAnimeTypes, ShortAnimeTypes } from '../types'
 
-const source = 'https://yummyanime.tv'
+import { SearchAnime, AnimeInfo } from '../types'
 
-function formatAuthKey(data: any): string {
-    const $ = cheerio.load(data)
+import config from './config'
 
-    const pattern = /[^a-zа-яё0-9\s]/gi
+// function formatAuthKey(data: any): string {
+//     const $ = cheerio.load(data)
 
-    // const scriptData = $("script")
-    //     .get()[6]
-    //     .children[0].data.split("var")[3]
-    //     .split("=")[1];
+//     const pattern = /[^a-zа-яё0-9\s]/gi
 
-    // const authKey = scriptData
-    //     .replace(pattern, "")
-    //     .replace(/ /g, "")
-    //     .replace("\n", "");
+//     // const scriptData = $("script")
+//     //     .get()[6]
+//     //     .children[0].data.split("var")[3]
+//     //     .split("=")[1];
 
-    return ''
-}
+//     // const authKey = scriptData
+//     //     .replace(pattern, "")
+//     //     .replace(/ /g, "")
+//     //     .replace("\n", "");
 
-function formatSearchData(data: any): ShortAnimeTypes[] {
+//     return ''
+// }
+
+function formatSearchData(data: any): SearchAnime[] {
     const $ = cheerio.load(data)
     const animeList: any[] = []
 
@@ -43,7 +44,7 @@ function formatSearchData(data: any): ShortAnimeTypes[] {
     return animeList
 }
 
-function formatAnimeData(data: any): MiddleAnimeTypes {
+function formatAnimeData(data: any): AnimeInfo {
     const $ = cheerio.load(data)
     const animeGInfo: string[] = []
     let description: string = ''
@@ -58,11 +59,11 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
         description += $(el).text()
     })
 
-    const anime: MiddleAnimeTypes = {
-        source,
+    const anime: AnimeInfo = {
+        source: config.host,
         title: $('.page__subcol-header > h1').text(),
         originalName: $('.page__subcol-header > div').text(),
-        sourcePlayer: '',
+        player: '',
         status: '',
         director: animeGInfo[2],
         translates: $('.fon-dob > ul > li').text().split(':')[1].trimStart(),
@@ -78,7 +79,7 @@ function formatAnimeData(data: any): MiddleAnimeTypes {
     return anime
 }
 
-function formatPlayerUrl(data: any) {
+function formatIframeUrl(data: any) {
     const $ = cheerio.load(data)
     const translates: any = []
 
@@ -98,8 +99,7 @@ function formatPlayerUrl(data: any) {
 }
 
 export default {
-    formatAuthKey,
     formatSearchData,
-    formatPlayerUrl,
+    formatIframeUrl,
     formatAnimeData,
 }
