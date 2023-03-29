@@ -1,67 +1,67 @@
-import axios from "axios";
+import axios from 'axios'
 
 export default class DataParser {
-    private readonly host;
-    private readonly headers;
-    private readonly successCode;
-    private readonly routes;
-    private readonly failedMessage;
+    private readonly host
+    private readonly headers
+    private readonly successCode
+    private readonly routes
+    private readonly failedMessage
 
     constructor(host: string, routes: any, headers: any) {
-        this.host = host;
-        this.routes = routes;
-        this.headers = headers;
-        this.successCode = 200;
-        this.failedMessage = "Server request failed status: ";
+        this.host = host
+        this.routes = routes
+        this.headers = headers
+        this.successCode = 200
+        this.failedMessage = 'Server request failed status: '
     }
 
     public async _getHost() {
         return (
             await axios.request({
                 url: this.host,
-                method: "GET",
+                method: 'GET',
             })
-        ).data;
+        ).data
     }
 
     public async _getSearchData(formData: FormData) {
         const response = await axios.request({
             url: this.host + this.routes.search,
             data: formData,
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type":
-                    "multipart/form-data boundary=" + formData.get("_boundary"),
+                'Content-Type':
+                    'multipart/form-data boundary=' + formData.get('_boundary'),
             },
-        });
+        })
 
         if (response.status !== this.successCode)
-            throw Error(this.failedMessage + `${response.status} code`);
+            throw Error(this.failedMessage + `${response.status} code`)
 
-        return response.data;
+        return response.data
     }
 
     public async _getAnimeDetails(path: string) {
         const response = await axios.request({
             url: this.host + path,
-            method: "GET",
-        });
+            method: 'GET',
+        })
 
         if (response.status !== this.successCode)
-            throw Error(this.failedMessage + `${response.status} code`);
+            throw Error(this.failedMessage + `${response.status} code`)
 
-        return response.data;
+        return response.data
     }
 
     public async _getPlayer(formData: FormData) {
         const response = await axios.request({
             url: this.host + this.routes.player,
-            method: "POST",
+            method: 'POST',
             data: formData,
-        });
+        })
         if (response.status !== this.successCode)
-            throw Error(this.failedMessage + `${response.status} code`);
+            throw Error(this.failedMessage + `${response.status} code`)
 
-        return response.data;
+        return response.data
     }
 }

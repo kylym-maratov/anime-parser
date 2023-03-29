@@ -1,6 +1,5 @@
-import AnimeStarsParser from "./lib/animestars";
-import YummyAnimeParser from "./lib/yummyanime";
+import AnimeStarsParser from './lib/animestars'
+import YummyAnimeParser from './lib/yummyanime'
 
-
-export type YummyAnimeTypes = YummyAnimeParser;
-export type AnimeStarsTypes = AnimeStarsParser;
+export type YummyAnimeTypes = YummyAnimeParser
+export type AnimeStarsTypes = AnimeStarsParser
