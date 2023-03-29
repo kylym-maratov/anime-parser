@@ -4,7 +4,7 @@ const ymParser = new YummyAnimeParser()
 
 describe('Yummyanime getAnimes test', () => {
     it('Success', async () => {
-        const data = await ymParser.parseAnimes('Атака титанов')
+        const data = await ymParser.getAnimesByName('Атака титанов')
         expect(data)
     })
 })

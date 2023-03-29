@@ -32,6 +32,31 @@ export default class YummyAnimeParser extends DataParser {
         }
     }
 
+    async getAnimeByName(query: string, limit: number | null = null) {
+        try {
+            const searchResult = await this.searchSeveralAnime(query)
+
+            const animeDetailsData = await this._getAnimeDetails(
+                searchResult[0].url
+            )
+
+            const formatedAnime = formatter.formatAnimeData(animeDetailsData)
+
+            if (!formatedAnime.player.includes('/engine/ajax')) {
+                return { ...formatedAnime, ...searchResult[0] }
+            }
+
+            const fullAnimeData = formatter.formatPlayerData(
+                await this.getAnimeIframe(
+                    formatedAnime.player,
+                    searchResult[0].url
+                )
+            )
+
+            return fullAnimeData
+        } catch (e) {}
+    }
+
     async getAnimesByName(
         query: string,
         limit: number | null = null
@@ -65,8 +90,6 @@ export default class YummyAnimeParser extends DataParser {
             })
 
             const animes: Anime[] | any[] = await Promise.all(aniParsePromises)
-
-            if (!animes.length) throw new Error('Cannot find anime by query')
 
             return animes.filter((item) => item !== null)
         } catch (e) {
