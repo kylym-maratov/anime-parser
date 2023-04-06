@@ -19,26 +19,21 @@ class AnimeStarsParser extends data_parser_1.default {
     constructor() {
         super(config_1.default.host, config_1.default.routes, config_1.default.headers);
     }
-    parseAuthKey() {
+    // private async getAuthKey() {
+    //     try {
+    //         const hostData = await this._getHost()
+    //         const authKey = formatter.formatAuthKey(hostData)
+    //         return authKey
+    //     } catch (e) {
+    //         throw e
+    //     }
+    // }
+    searchSeveralAnime(query) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const hostData = yield this._getHost();
-                const authKey = formatter_1.default.formatAuthKey(hostData);
-                return authKey;
-            }
-            catch (e) {
-                throw e;
-            }
-        });
-    }
-    parseSearch(query) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const authKey = yield this.parseAuthKey();
                 const formData = new FormData();
-                formData.append("story", query);
-                formData.append("user_hash", authKey);
-                formData.append("subaction", "search");
+                formData.append('story', query);
+                formData.append('subaction', 'search');
                 const data = yield this._getSearchData(formData);
                 const formated = formatter_1.default.formatSearchData(data);
                 return formated;
@@ -48,37 +43,37 @@ class AnimeStarsParser extends data_parser_1.default {
             }
         });
     }
-    parsePlayer(url) {
+    getAnimeIframe(url) {
         return __awaiter(this, void 0, void 0, function* () {
-            let news_id = url.split("-")[0].replace("/", "");
+            let news_id = url.split('-')[0].replace('/', '');
             const formData = new FormData();
-            formData.append("news_id", news_id);
-            formData.append("action", "load_player");
-            const player = yield this._getPlayer(formData);
-            const playerData = formatter_1.default.formatPlayerUrl(player);
-            return playerData;
+            formData.append('news_id', news_id);
+            formData.append('action', 'load_player');
+            const iframeData = yield this._getPlayer(formData);
+            const iframe = formatter_1.default.formatIframeUrl(iframeData);
+            return iframe;
         });
     }
-    parseAnimes(query, limit = null) {
+    getAnimesByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const searchResult = yield this.parseSearch(query);
+                const searchResult = yield this.searchSeveralAnime(query);
                 if (limit)
                     searchResult.length = limit;
-                const animePromises = searchResult.map((item, i) => {
+                const animePromiseWrapper = searchResult.map((item, i) => {
                     return new Promise((resolve) => {
                         this._getAnimeDetails(item.url).then((data) => {
                             const animeData = formatter_1.default.formatAnimeData(data);
-                            this.parsePlayer(item.url).then((player) => {
+                            this.getAnimeIframe(item.url).then((player) => {
                                 const fullAnimeData = Object.assign(Object.assign(Object.assign({}, item), animeData), { iframeUrl: player.iframeUrl, translatesIds: player.translates });
                                 resolve(fullAnimeData);
                             });
                         });
                     });
                 });
-                const animes = yield Promise.all(animePromises);
+                const animes = yield Promise.all(animePromiseWrapper);
                 if (!animes.length)
-                    throw new Error("Cannot find animes by query");
+                    throw new Error('Cannot find animes by query');
                 return animes.filter((item) => item !== null);
             }
             catch (e) {

@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const yummyanime_1 = __importDefault(require("../lib/yummyanime"));
 const ymParser = new yummyanime_1.default();
-describe("Yummyanime getAnimes test", () => {
-    it("Success", () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield ymParser.parseAnimes("Атака титанов");
+describe('Yummyanime getAnimes test', () => {
+    it('Success', () => __awaiter(void 0, void 0, void 0, function* () {
+        const data = yield ymParser.getAnimesByName('Атака титанов');
         expect(data);
     }));
 });

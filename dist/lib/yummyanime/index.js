@@ -19,7 +19,7 @@ class YummyAnimeParser extends data_parser_1.default {
     constructor() {
         super(config_1.default.host, config_1.default.routes, config_1.default.headers);
     }
-    parseSearch(query) {
+    searchSeveralAnime(query) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this._getSerachData(query);
@@ -31,7 +31,7 @@ class YummyAnimeParser extends data_parser_1.default {
             }
         });
     }
-    parsePlayer(url, referer) {
+    getAnimeIframe(url, referer) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const data = yield this._getAnimePlayer(url, referer);
@@ -43,19 +43,34 @@ class YummyAnimeParser extends data_parser_1.default {
             }
         });
     }
-    parseAnimes(query, limit = null) {
+    getAnimeByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const searchResult = yield this.parseSearch(query);
+                const searchResult = yield this.searchSeveralAnime(query);
+                const animeDetailsData = yield this._getAnimeDetails(searchResult[0].url);
+                const formatedAnime = formatter_1.default.formatAnimeData(animeDetailsData);
+                if (!formatedAnime.player.includes('/engine/ajax')) {
+                    return Object.assign(Object.assign({}, formatedAnime), searchResult[0]);
+                }
+                const fullAnimeData = formatter_1.default.formatPlayerData(yield this.getAnimeIframe(formatedAnime.player, searchResult[0].url));
+                return fullAnimeData;
+            }
+            catch (e) { }
+        });
+    }
+    getAnimesByName(query, limit = null) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const searchResult = yield this.searchSeveralAnime(query);
                 if (limit)
                     searchResult.length = limit;
                 const aniParsePromises = searchResult.map((item) => {
                     return new Promise((resolve) => {
                         this._getAnimeDetails(item.url).then((animeDetailsData) => {
                             const animeData = formatter_1.default.formatAnimeData(animeDetailsData);
-                            if (!animeData.sourcePlayer.includes("/engine/ajax"))
+                            if (!animeData.player.includes('/engine/ajax'))
                                 return resolve(Object.assign(Object.assign({}, animeData), item));
-                            this.parsePlayer(animeData.sourcePlayer, item.url).then((iframeUrl) => {
+                            this.getAnimeIframe(animeData.player, item.url).then((iframeUrl) => {
                                 const fullAnimeData = Object.assign(Object.assign(Object.assign({}, animeData), item), { iframeUrl });
                                 resolve(fullAnimeData);
                             });
@@ -63,8 +78,6 @@ class YummyAnimeParser extends data_parser_1.default {
                     });
                 });
                 const animes = yield Promise.all(aniParsePromises);
-                if (!animes.length)
-                    throw new Error("Cannot find anime by query");
                 return animes.filter((item) => item !== null);
             }
             catch (e) {

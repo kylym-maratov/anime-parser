@@ -19,13 +19,13 @@ class DataParser {
         this.routes = routes;
         this.headers = headers;
         this.successCode = 200;
-        this.failedMessage = "Server request failed status: ";
+        this.failedMessage = 'Server request failed status: ';
     }
     _getHost() {
         return __awaiter(this, void 0, void 0, function* () {
             return (yield axios_1.default.request({
                 url: this.host,
-                method: "GET",
+                method: 'GET',
             })).data;
         });
     }
@@ -34,9 +34,9 @@ class DataParser {
             const response = yield axios_1.default.request({
                 url: this.host + this.routes.search,
                 data: formData,
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Content-Type": "multipart/form-data boundary=" + formData.get("_boundary"),
+                    'Content-Type': 'multipart/form-data boundary=' + formData.get('_boundary'),
                 },
             });
             if (response.status !== this.successCode)
@@ -48,7 +48,7 @@ class DataParser {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.request({
                 url: this.host + path,
-                method: "GET",
+                method: 'GET',
             });
             if (response.status !== this.successCode)
                 throw Error(this.failedMessage + `${response.status} code`);
@@ -59,7 +59,7 @@ class DataParser {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.request({
                 url: this.host + this.routes.player,
-                method: "POST",
+                method: 'POST',
                 data: formData,
             });
             if (response.status !== this.successCode)

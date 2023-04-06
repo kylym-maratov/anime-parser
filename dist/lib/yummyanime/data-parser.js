@@ -21,11 +21,11 @@ class DataParser {
         this.routes = routes;
         this.failedMessage = `Request failed with`;
     }
-    _getSerachData(query = "") {
+    _getSerachData(query = '') {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.request({
                 url: this.host + this.routes.search + query,
-                method: "POST",
+                method: 'POST',
             });
             if (response.status !== this.successCode)
                 throw Error(this.failedMessage + `${response.status} code`);
@@ -36,7 +36,7 @@ class DataParser {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield axios_1.default.request({
                 url: this.host + path,
-                method: "GET",
+                method: 'GET',
             });
             if (response.status !== this.successCode)
                 throw Error(this.failedMessage + `${response.status} code`);
@@ -48,7 +48,7 @@ class DataParser {
             const headers = Object.assign(Object.assign({}, this.headers), { referer: this.host + referer });
             const response = yield axios_1.default.request({
                 url: this.host + path,
-                method: "GET",
+                method: 'GET',
                 headers,
             });
             if (response.status !== this.successCode)

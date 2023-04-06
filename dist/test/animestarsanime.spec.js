@@ -14,9 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const animestars_1 = __importDefault(require("../lib/animestars"));
 const aniStarsParser = new animestars_1.default();
-describe("AnimeStars parseAnimes test", () => {
-    it("Success", () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield aniStarsParser.parseAnimes("Атака титанов");
+describe('AnimeStars parseAnimes test', () => {
+    it('Success', () => __awaiter(void 0, void 0, void 0, function* () {
+        const data = yield aniStarsParser.getAnimesByName('Атака титанов');
         expect(data);
     }));
 });
