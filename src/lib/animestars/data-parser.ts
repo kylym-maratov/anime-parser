@@ -24,7 +24,7 @@ export default class DataParser {
         ).data
     }
 
-    public async _getSearchData(formData: FormData) {
+    public async _getSearchData(formData: any) {
         const response = await axios.request({
             url: this.host + this.routes.search,
             data: formData,
@@ -53,7 +53,7 @@ export default class DataParser {
         return response.data
     }
 
-    public async _getPlayer(formData: FormData) {
+    public async _getPlayer(formData: any) {
         const response = await axios.request({
             url: this.host + this.routes.player,
             method: 'POST',

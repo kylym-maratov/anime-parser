@@ -2,6 +2,7 @@ import DataParser from './data-parser'
 import config from './config'
 import formatter from './formatter'
 import { Anime } from '../types'
+import FormData from 'form-data'
 
 export default class AnimeStarsParser extends DataParser {
     constructor() {
