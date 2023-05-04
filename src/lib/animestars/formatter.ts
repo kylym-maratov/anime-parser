@@ -1,6 +1,6 @@
 import cheerio from 'cheerio'
 
-import { SearchAnime, AnimeInfo } from '../anime.interface'
+import { SearchAnime, AnimeInfo } from '../types'
 
 import config from './config'
 

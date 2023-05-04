@@ -2,7 +2,7 @@ import cheerio from 'cheerio'
 
 import config from './config'
 
-import { AnimeInfo, SearchAnime } from '../anime.interface'
+import { AnimeInfo, SearchAnime } from '../types'
 
 function formatSearchData(data: any): SearchAnime[] {
     const $ = cheerio.load(data)
