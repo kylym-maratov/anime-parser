@@ -1,6 +1,6 @@
 {
     "name": "anime-parser",
-    "version": "1.2.4",
+    "version": "1.2.6",
     "description": "Library for parse anime from popular RU websites",
     "main": "./dist/index.js",
     "types": "./src/types.d.ts",
@@ -21,7 +21,7 @@
         "anime",
         "parse"
     ],
-    "type": "module",
+    "type": "commonjs",
     "author": "Kylym M.",
     "license": "No-license",
     "dependencies": {
