@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const data_parser_1 = __importDefault(require("./data-parser"));
 const config_1 = __importDefault(require("./config"));
 const formatter_1 = __importDefault(require("./formatter"));
+const form_data_1 = __importDefault(require("form-data"));
 class AnimeStarsParser extends data_parser_1.default {
     constructor() {
         super(config_1.default.host, config_1.default.routes, config_1.default.headers);
@@ -30,7 +31,7 @@ class AnimeStarsParser extends data_parser_1.default {
     // }
     searchSeveralAnime(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const formData = new FormData();
+            const formData = new form_data_1.default();
             formData.append('story', query);
             formData.append('subaction', 'search');
             const data = yield this._getSearchData(formData);
@@ -41,7 +42,7 @@ class AnimeStarsParser extends data_parser_1.default {
     getAnimeIframe(url) {
         return __awaiter(this, void 0, void 0, function* () {
             let news_id = url.split('-')[0].replace('/', '');
-            const formData = new FormData();
+            const formData = new form_data_1.default();
             formData.append('news_id', news_id);
             formData.append('action', 'load_player');
             const iframeData = yield this._getPlayer(formData);
