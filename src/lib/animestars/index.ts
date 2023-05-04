@@ -20,18 +20,14 @@ export default class AnimeStarsParser extends DataParser {
     // }
 
     private async searchSeveralAnime(query: string) {
-        try {
-            const formData = new FormData()
-            formData.append('story', query)
-            formData.append('subaction', 'search')
+        const formData = new FormData()
+        formData.append('story', query)
+        formData.append('subaction', 'search')
 
-            const data = await this._getSearchData(formData)
-            const formated = formatter.formatSearchData(data)
+        const data = await this._getSearchData(formData)
+        const formated = formatter.formatSearchData(data)
 
-            return formated
-        } catch (e) {
-            throw e
-        }
+        return formated
     }
 
     private async getAnimeIframe(url: string) {
@@ -53,38 +49,32 @@ export default class AnimeStarsParser extends DataParser {
         query: string,
         limit: number | null = null
     ): Promise<Anime[]> {
-        try {
-            const searchResult = await this.searchSeveralAnime(query)
+        const searchResult = await this.searchSeveralAnime(query)
 
-            if (limit) searchResult.length = limit
+        if (limit) searchResult.length = limit
 
-            const animePromiseWrapper = searchResult.map((item, i) => {
-                return new Promise((resolve) => {
-                    this._getAnimeDetails(item.url).then((data) => {
-                        const animeData = formatter.formatAnimeData(data)
+        const animePromiseWrapper = searchResult.map((item, i) => {
+            return new Promise((resolve) => {
+                this._getAnimeDetails(item.url).then((data) => {
+                    const animeData = formatter.formatAnimeData(data)
 
-                        this.getAnimeIframe(item.url).then((player) => {
-                            const fullAnimeData: Anime = {
-                                ...item,
-                                ...animeData,
-                                iframeUrl: player.iframeUrl,
-                                translatesIds: player.translates,
-                            }
-                            resolve(fullAnimeData)
-                        })
+                    this.getAnimeIframe(item.url).then((player) => {
+                        const fullAnimeData: Anime = {
+                            ...item,
+                            ...animeData,
+                            iframeUrl: player.iframeUrl,
+                            translatesIds: player.translates,
+                        }
+                        resolve(fullAnimeData)
                     })
                 })
             })
+        })
 
-            const animes: Anime[] | any[] = await Promise.all(
-                animePromiseWrapper
-            )
+        const animes: Anime[] | any[] = await Promise.all(animePromiseWrapper)
 
-            if (!animes.length) throw new Error('Cannot find animes by query')
+        if (!animes.length) throw new Error('Cannot find animes by query')
 
-            return animes.filter((item) => item !== null)
-        } catch (e) {
-            throw e
-        }
+        return animes.filter((item) => item !== null)
     }
 }
