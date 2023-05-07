@@ -31,7 +31,7 @@ export default class DataParser {
             method: 'POST',
             headers: {
                 'Content-Type':
-                    'multipart/form-data boundary=' + formData.get('_boundary'),
+                    'multipart/form-data boundary=' + formData.getBoundary(),
             },
         })
 
