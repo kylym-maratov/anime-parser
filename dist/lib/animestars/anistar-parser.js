@@ -50,7 +50,7 @@ class AnimeStarsParser extends data_parser_1.default {
             return iframe;
         });
     }
-    getAnimesByName(query, limit = null) {
+    searchAnimesByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
             const searchResult = yield this.searchSeveralAnime(query);
             if (limit)

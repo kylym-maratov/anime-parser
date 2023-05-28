@@ -33,7 +33,7 @@ class YummyAnimeParser extends data_parser_1.default {
             return formated;
         });
     }
-    getAnimeByName(query, limit = null) {
+    searchAnimeByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
             const searchResult = yield this.searchSeveralAnime(query);
             const animeDetailsData = yield this._getAnimeDetails(searchResult[0].url);
@@ -45,7 +45,7 @@ class YummyAnimeParser extends data_parser_1.default {
             return fullAnimeData;
         });
     }
-    getAnimesByName(query, limit = null) {
+    searchAnimesByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
             const searchResult = yield this.searchSeveralAnime(query);
             if (limit)

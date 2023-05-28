@@ -25,6 +25,8 @@ export default class YummyAnimeParser extends DataParser {
     }
 
     async searchAnimeByName(query: string, limit: number | null = null) {
+        if (!query.length) throw new Error('Query cannot be empty')
+
         const searchResult = await this.searchSeveralAnime(query)
 
         const animeDetailsData = await this._getAnimeDetails(

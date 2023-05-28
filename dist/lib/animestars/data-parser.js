@@ -36,7 +36,7 @@ class DataParser {
                 data: formData,
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'multipart/form-data boundary=' + formData.get('_boundary'),
+                    'Content-Type': 'multipart/form-data boundary=' + formData.getBoundary(),
                 },
             });
             if (response.status !== this.successCode)

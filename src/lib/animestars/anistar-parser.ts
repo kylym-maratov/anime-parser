@@ -50,6 +50,8 @@ export default class AnimeStarsParser extends DataParser {
         query: string,
         limit: number | null = null
     ): Promise<Anime[]> {
+        if (!query.length) throw new Error('Query cannot be empty')
+
         const searchResult = await this.searchSeveralAnime(query)
 
         if (limit) searchResult.length = limit
