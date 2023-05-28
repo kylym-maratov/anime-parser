@@ -46,7 +46,7 @@ export default class AnimeStarsParser extends DataParser {
         return iframe
     }
 
-    async getAnimesByName(
+    async searchAnimesByName(
         query: string,
         limit: number | null = null
     ): Promise<Anime[]> {

@@ -14,7 +14,7 @@ app.get('/anime', async (req: Request, res: Response) => {
     if (!query) return res.status(404).send('Not found')
 
     for (let engine of engines) {
-        const animes = await engine.getAnimesByName(query.toString(), 3)
+        const animes = await engine.searchAnimesByName(query.toString(), 3)
 
         if (!animes.length) continue
 

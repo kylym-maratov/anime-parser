@@ -24,7 +24,7 @@ export default class YummyAnimeParser extends DataParser {
         return formated
     }
 
-    async getAnimeByName(query: string, limit: number | null = null) {
+    async searchAnimeByName(query: string, limit: number | null = null) {
         const searchResult = await this.searchSeveralAnime(query)
 
         const animeDetailsData = await this._getAnimeDetails(
@@ -44,7 +44,7 @@ export default class YummyAnimeParser extends DataParser {
         return fullAnimeData
     }
 
-    async getAnimesByName(
+    async searchAnimesByName(
         query: string,
         limit: number | null = null
     ): Promise<Anime[]> {
