@@ -14,7 +14,7 @@ and import index.js file from dist directory.
 
 ### The library can parse this data
 
-url: string
+`url: string
 year: string
 image?: string
 rating: string
@@ -29,6 +29,6 @@ status: string
 director: string
 iframeUrl: string
 translateId: string
-trasnlateName: string
+trasnlateName: string`
 
 This lib use axios, cheerio.
