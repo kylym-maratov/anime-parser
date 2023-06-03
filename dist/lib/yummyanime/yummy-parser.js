@@ -35,6 +35,8 @@ class YummyAnimeParser extends data_parser_1.default {
     }
     searchAnimeByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!query.length)
+                throw new Error('Query cannot be empty');
             const searchResult = yield this.searchSeveralAnime(query);
             const animeDetailsData = yield this._getAnimeDetails(searchResult[0].url);
             const formatedAnime = formatter_1.default.formatAnimeData(animeDetailsData);

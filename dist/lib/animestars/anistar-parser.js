@@ -52,6 +52,8 @@ class AnimeStarsParser extends data_parser_1.default {
     }
     searchAnimesByName(query, limit = null) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!query.length)
+                throw new Error('Query cannot be empty');
             const searchResult = yield this.searchSeveralAnime(query);
             if (limit)
                 searchResult.length = limit;
