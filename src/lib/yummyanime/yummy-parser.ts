@@ -50,6 +50,7 @@ export default class YummyAnimeParser extends DataParser {
         query: string,
         limit: number | null = null
     ): Promise<Anime[]> {
+       try {
         const searchResult = await this.searchSeveralAnime(query)
 
         if (limit) searchResult.length = limit
@@ -80,5 +81,8 @@ export default class YummyAnimeParser extends DataParser {
         const animes: Anime[] | any[] = await Promise.all(aniParsePromises)
 
         return animes.filter((item) => item !== null)
+       }  catch (e) {
+            throw e
+       }
     }
 }

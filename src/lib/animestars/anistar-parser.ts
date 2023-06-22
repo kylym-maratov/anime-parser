@@ -52,32 +52,36 @@ export default class AnimeStarsParser extends DataParser {
     ): Promise<Anime[]> {
         if (!query.length) throw new Error('Query cannot be empty')
 
-        const searchResult = await this.searchSeveralAnime(query)
+        try {
+            const searchResult = await this.searchSeveralAnime(query)
 
-        if (limit) searchResult.length = limit
-
-        const animePromiseWrapper = searchResult.map((item, i) => {
-            return new Promise((resolve) => {
-                this._getAnimeDetails(item.url).then((data) => {
-                    const animeData = formatter.formatAnimeData(data)
-
-                    this.getAnimeIframe(item.url).then((player) => {
-                        const fullAnimeData: Anime = {
-                            ...item,
-                            ...animeData,
-                            iframeUrl: player.iframeUrl,
-                            translatesIds: player.translates,
-                        }
-                        resolve(fullAnimeData)
+            if (limit) searchResult.length = limit
+    
+            const animePromiseWrapper = searchResult.map((item, i) => {
+                return new Promise((resolve) => {
+                    this._getAnimeDetails(item.url).then((data) => {
+                        const animeData = formatter.formatAnimeData(data)
+    
+                        this.getAnimeIframe(item.url).then((player) => {
+                            const fullAnimeData: Anime = {
+                                ...item,
+                                ...animeData,
+                                iframeUrl: player.iframeUrl,
+                                translatesIds: player.translates,
+                            }
+                            resolve(fullAnimeData)
+                        })
                     })
                 })
             })
-        })
-
-        const animes: Anime[] | any[] = await Promise.all(animePromiseWrapper)
-
-        if (!animes.length) throw new Error('Cannot find animes by query')
-
-        return animes.filter((item) => item !== null)
+    
+            const animes: Anime[] | any[] = await Promise.all(animePromiseWrapper)
+    
+            if (!animes.length) throw new Error('Cannot find animes by query')
+    
+            return animes.filter((item) => item !== null)
+        } catch (e) {
+            throw e
+        }
     }
 }
